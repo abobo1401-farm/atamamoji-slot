@@ -5,89 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>しるこスロット</title>
 <style>
-  :root{
-    --pink:#ff2da0; --gold:#ffd21f; --dark:#180014; --brown:#210000;
-  }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0; min-height:100vh; overflow:hidden; font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif; color:#fff; background:radial-gradient(circle at 50% 35%, #7b004d 0%, #300026 35%, #09000d 72%); touch-action:manipulation;}
-  .bg:before{content:"";position:fixed;inset:-20%;background:repeating-conic-gradient(from 0deg, rgba(255,0,130,.28) 0 5deg, transparent 5deg 12deg);filter:blur(2px);opacity:.55;animation:spin 28s linear infinite;transform-origin:center}.bg:after{content:"★ ✦ ★ ✦ ★ ✦ ★ ✦ ★ ✦ ★";position:fixed;inset:0;font-size:42px;letter-spacing:54px;line-height:150px;color:#ff4fb3;text-shadow:0 0 18px #ff4fb3,0 0 30px #ffbd00;opacity:.65;word-break:break-all;pointer-events:none}@keyframes spin{to{transform:rotate(360deg)}}
-  .wrap{position:relative;z-index:1; width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 14px 24px;gap:18px}.title{font-weight:900;font-size:clamp(28px,5vw,60px);color:#fff;text-shadow:0 0 10px var(--pink),0 0 22px var(--pink);letter-spacing:.08em}.machine{width:min(96vw,1050px);border-radius:38px;padding:18px;background:linear-gradient(180deg,#ff26b5,#ffd21f 17%,#d27300 48%,#ff2da0);box-shadow:0 0 18px #ff2da0,0 0 34px rgba(255,45,160,.9), inset 0 0 0 5px #fff58a}.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.slot{height:clamp(150px,28vw,270px);border-radius:28px;background:linear-gradient(180deg,#fffef9,#fff4ef);border:7px solid #2a0500;box-shadow:inset 0 0 0 8px rgba(0,0,0,.12),0 7px 0 rgba(60,0,0,.7);display:flex;align-items:center;justify-content:center;overflow:hidden}.char{font-size:clamp(96px,21vw,210px);font-weight:1000;color:#210000;-webkit-text-stroke:clamp(5px,1vw,10px) var(--gold);text-shadow:0 0 0 #000,0 5px 0 #a95800,0 0 16px var(--pink),0 0 30px var(--pink);line-height:1}.rolling .first{animation:bounce .07s linear infinite}@keyframes bounce{0%{transform:translateY(-16px)}100%{transform:translateY(16px)}}.word{font-size:clamp(64px,14vw,150px);font-weight:1000;color:#210000;-webkit-text-stroke:clamp(4px,.8vw,8px) var(--gold);text-shadow:0 5px 0 #8d4c00,0 0 14px var(--pink),0 0 28px var(--pink)}.result{height:46px;font-size:clamp(24px,4vw,44px);font-weight:900;text-shadow:0 0 12px #ff2da0}.result.hit{color:#fff700;animation:flash .35s alternate infinite}.result.miss{color:#fff}@keyframes flash{from{transform:scale(1)}to{transform:scale(1.08)}}.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}.btn{border:0;border-radius:999px;padding:16px 28px;font-size:22px;font-weight:900;color:#fff;background:linear-gradient(180deg,#ff2da0,#b40063);box-shadow:0 6px 0 #610036,0 0 18px rgba(255,45,160,.7)}.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #610036}.btn.stop{background:linear-gradient(180deg,#ffd21f,#e17700);box-shadow:0 6px 0 #7a3600,0 0 18px rgba(255,210,31,.7);color:#240000}.panel{position:fixed;right:12px;top:12px;z-index:5}.gear{width:54px;height:54px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:rgba(20,0,20,.65);color:#fff;font-size:28px}.settings{display:none;position:fixed;right:12px;top:76px;width:min(92vw,420px);max-height:80vh;overflow:auto;background:rgba(15,0,20,.94);border:2px solid rgba(255,255,255,.25);border-radius:20px;padding:16px;box-shadow:0 0 28px rgba(255,45,160,.55)}.settings.open{display:block}.settings label{display:block;font-weight:800;margin:10px 0 5px}.settings input,.settings textarea,.settings select{width:100%;font-size:18px;border-radius:12px;border:1px solid #777;padding:10px;background:#fff;color:#111}.settings textarea{height:120px}.small{font-size:13px;opacity:.8}.confetti{position:fixed;inset:0;pointer-events:none;z-index:4}.piece{position:absolute;width:10px;height:18px;background:#fff700;animation:fall 1.8s ease-out forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
-  @media(max-width:600px){.wrap{justify-content:flex-start;padding-top:70px}.title{font-size:28px}.machine{border-radius:24px;padding:10px}.slots{gap:7px}.slot{border-width:4px;border-radius:18px;height:30vw}.char{font-size:26vw;-webkit-text-stroke:4px var(--gold)}.word{font-size:22vw}.btn{font-size:20px;padding:15px 24px}.result{height:34px}}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:'Yu Gothic','Hiragino Sans','Meiryo',sans-serif;background:#16001f;color:#fff;touch-action:manipulation;user-select:none}
+  body{background:
+    radial-gradient(circle at 50% 20%, rgba(255,0,150,.55), transparent 32%),
+    radial-gradient(circle at 50% 50%, rgba(255,180,0,.25), transparent 22%),
+    radial-gradient(circle at 20% 80%, rgba(255,0,200,.35), transparent 25%),
+    linear-gradient(180deg,#100018 0%,#24002d 55%,#09000f 100%);}
+  .stars{position:fixed;inset:0;pointer-events:none;background-image:
+    radial-gradient(#fff 1.5px, transparent 2px),radial-gradient(#ff4bd8 2px, transparent 3px),radial-gradient(#ffd32a 2px, transparent 3px);
+    background-size:90px 90px,140px 140px,180px 180px;animation:twinkle 3s infinite alternate;opacity:.9}
+  @keyframes twinkle{from{filter:brightness(.8)}to{filter:brightness(1.4)}}
+  .wrap{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 12px 96px;gap:14px}
+  .title{font-weight:900;font-size:clamp(24px,7vw,42px);letter-spacing:.04em;text-shadow:0 0 10px #ff1493,0 4px 0 #5b001d;color:#fff}
+  .slotFrame{width:min(96vw,780px);border-radius:28px;padding:10px;background:linear-gradient(180deg,#ff31c8,#fff02a 18%,#ff9100 45%,#ff31c8 100%);box-shadow:0 0 22px #ff1cc8, inset 0 0 0 4px #fff;}
+  .reels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;background:#4a1600;border-radius:22px;padding:8px}
+  .reel{height:clamp(130px,34vw,230px);border-radius:20px;background:linear-gradient(180deg,#fff,#fff9f0);display:flex;align-items:center;justify-content:center;border:5px solid #210006;box-shadow:inset 0 0 0 5px #e7c6aa,0 2px 0 #fff;color:#230006;overflow:hidden}
+  .letter{font-size:clamp(74px,22vw,170px);font-weight:1000;line-height:1;text-shadow:4px 0 #ffcf24,-4px 0 #ffcf24,0 4px #ffcf24,0 -4px #ffcf24,0 0 12px #ff39c7;transform:translateY(-2px)}
+  .rolling .first{animation:bounce .08s infinite alternate}
+  @keyframes bounce{from{transform:translateY(-8px) scale(1.03)}to{transform:translateY(8px) scale(.98)}}
+  .subtitle{font-size:clamp(46px,16vw,110px);font-weight:1000;color:#280006;text-shadow:4px 0 #ffd72c,-4px 0 #ffd72c,0 4px #ffd72c,0 -4px #ffd72c,0 0 16px #ff2bbc,0 8px 0 #9b0037;line-height:.95}
+  .message{min-height:38px;font-size:clamp(20px,6vw,36px);font-weight:900;text-shadow:0 0 10px #ff2bbc;text-align:center}
+  .panel{position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(15,0,25,.86);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.25);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  button,input,select,textarea{font:inherit;border:0;border-radius:14px}
+  .mainBtn{grid-column:1/3;height:56px;font-size:24px;font-weight:900;color:#fff;background:linear-gradient(180deg,#18e56e,#039e3c);box-shadow:0 5px 0 #005c20}
+  .stop{background:linear-gradient(180deg,#ff3b78,#c50039);box-shadow:0 5px 0 #74001e}
+  .miniBtn{height:42px;background:#fff;color:#301;font-weight:800}
+  .settings{position:fixed;z-index:10;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end}.settings.open{display:flex}
+  .sheet{width:100%;max-height:86dvh;overflow:auto;background:#fff;color:#222;border-radius:22px 22px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom))}
+  .sheet h2{margin:0 0 10px;font-size:22px}.row{margin:12px 0}.row label{display:block;font-weight:800;margin-bottom:5px}.row input,.row select,.row textarea{width:100%;padding:12px;background:#f1f1f5;color:#111;border:1px solid #ddd}.row textarea{height:110px;resize:vertical}.closeBtn{width:100%;height:48px;background:#222;color:#fff;font-weight:900;margin-top:10px}.successFlash{animation:flash .9s ease-in-out 3}@keyframes flash{50%{filter:brightness(2.3) saturate(1.8)}}
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:4;overflow:hidden}.piece{position:absolute;width:10px;height:18px;background:#fff;animation:fall 1.8s linear forwards}@keyframes fall{to{transform:translateY(110dvh) rotate(720deg);opacity:0}}
 </style>
 </head>
 <body>
-<div class="bg"></div><div class="confetti" id="confetti"></div>
-<div class="panel"><button class="gear" id="gear">⚙</button><div class="settings" id="settings">
-  <label>当たり単語</label><input id="target" value="しるこ" maxlength="3">
-  <label>成功率</label><select id="rate"><option value="10">1/10</option><option value="5">1/5</option><option value="20">1/20</option><option value="50">1/50</option><option value="1">必ず成功</option></select>
-  <label>候補文字（1行に1文字）</label><textarea id="candidates">あ
-い
-う
-え
-お
-か
-き
-く
-け
-こ
-さ
-し
-す
-せ
-そ
-た
-ち
-つ
-て
-と
-な
-に
-ぬ
-ね
-の
-は
-ひ
-ふ
-へ
-ほ
-ま
-み
-む
-め
-も
-や
-ゆ
-よ
-ら
-り
-る
-れ
-ろ
-わ</textarea>
-  <p class="small">※当たり単語は3文字想定。例：しるこ → □るこ。設定はこの端末に保存されます。</p>
-  <button class="btn" id="save">保存</button>
-</div></div>
-<div class="wrap" id="wrap">
+<div class="stars"></div><div class="confetti" id="confetti"></div>
+<div class="wrap" id="stage">
   <div class="title">🎰 しるこスロット</div>
-  <div class="machine" id="machine"><div class="slots">
-    <div class="slot"><div class="char first" id="first">□</div></div>
-    <div class="slot"><div class="char" id="second">る</div></div>
-    <div class="slot"><div class="char" id="third">こ</div></div>
+  <div class="slotFrame" id="slotFrame"><div class="reels">
+    <div class="reel"><div class="letter first" id="first">□</div></div>
+    <div class="reel"><div class="letter" id="second">る</div></div>
+    <div class="reel"><div class="letter" id="third">こ</div></div>
   </div></div>
-  <div class="word" id="word">□るこ</div>
-  <div class="result" id="result">スタートを押してね</div>
-  <div class="controls"><button class="btn" id="start">スタート</button><button class="btn stop" id="stop">ストップ</button></div>
+  <div class="subtitle" id="bottomText">だよ</div>
+  <div class="message" id="message">スタートを押してね</div>
 </div>
+<div class="panel">
+  <button class="mainBtn" id="startStop">START</button>
+  <button class="miniBtn" id="reset">リセット</button>
+  <button class="miniBtn" id="openSettings">設定</button>
+</div>
+<div class="settings" id="settings"><div class="sheet">
+  <h2>設定</h2>
+  <div class="row"><label>完成させたい単語</label><input id="wordInput" value="しるこ" /></div>
+  <div class="row"><label>成功率</label><select id="rateInput"><option value="10">1/10</option><option value="5">1/5</option><option value="20">1/20</option><option value="50">1/50</option><option value="1">必ず成功</option></select></div>
+  <div class="row"><label>ルーレット候補（1文字ずつ / 改行かカンマ区切り）</label><textarea id="charsInput">あ,い,う,え,お,か,き,く,け,こ,さ,し,す,せ,そ,た,ち,つ,て,と,な,に,ぬ,ね,の,は,ひ,ふ,へ,ほ,ま,み,む,め,も,や,ゆ,よ,ら,り,る,れ,ろ,わ</textarea></div>
+  <div class="row"><label>下の文字</label><input id="bottomInput" value="だよ" /></div>
+  <button class="closeBtn" id="saveSettings">保存して閉じる</button>
+</div></div>
 <script>
-const $=id=>document.getElementById(id);let timer=null,rolling=false,tries=0,hits=0;let cfg={target:'しるこ',rate:10,candidates:[]};
-function load(){const saved=localStorage.getItem('sirukoSlotCfg');if(saved){try{const s=JSON.parse(saved);$('target').value=s.target||'しるこ';$('rate').value=String(s.rate||10);$('candidates').value=(s.candidates||[]).join('\n')||$('candidates').value}catch(e){}}apply();}
-function apply(){cfg.target=($('target').value||'しるこ').trim();if(cfg.target.length<2)cfg.target='しるこ';cfg.rate=Number($('rate').value)||10;cfg.candidates=$('candidates').value.split(/\n|,|、|\s+/).map(s=>s.trim()).filter(Boolean).map(s=>[...s][0]);if(!cfg.candidates.length)cfg.candidates=['あ','い','う','え','お','し','ま','な','た'];$('second').textContent=[...cfg.target][1]||'る';$('third').textContent=[...cfg.target][2]||'こ';$('first').textContent='□';$('word').textContent='□'+[...cfg.target].slice(1).join('');}
-function save(){apply();localStorage.setItem('sirukoSlotCfg',JSON.stringify(cfg));$('settings').classList.remove('open');}
-function rand(){return cfg.candidates[Math.floor(Math.random()*cfg.candidates.length)]||'あ'}
-function start(){if(rolling)return;apply();rolling=true;$('machine').classList.add('rolling');$('result').className='result';$('result').textContent='回転中…';timer=setInterval(()=>{$('first').textContent=rand();$('word').textContent=$('first').textContent+[...cfg.target].slice(1).join('')},55)}
-function stop(){if(!rolling)return;clearInterval(timer);rolling=false;$('machine').classList.remove('rolling');tries++;const targetFirst=[...cfg.target][0];const hit=Math.floor(Math.random()*cfg.rate)===0;let final=hit?targetFirst:rand();let guard=0;while(!hit && final===targetFirst && guard<50){final=rand();guard++}$('first').textContent=final;const fixed=[...cfg.target].slice(1).join('');$('word').textContent=final+fixed;if(hit){hits++;$('result').className='result hit';$('result').textContent='大当たり！ '+cfg.target+' 完成！！';confetti()}else{$('result').className='result miss';$('result').textContent='ハズレ！ '+final+fixed+' になっちゃった！ 笑'}}
-function confetti(){const area=$('confetti');area.innerHTML='';for(let i=0;i<80;i++){const p=document.createElement('div');p.className='piece';p.style.left=Math.random()*100+'vw';p.style.top='-30px';p.style.background=['#fff700','#ff2da0','#ffffff','#ffd21f','#66f'][i%5];p.style.animationDelay=Math.random()*.45+'s';area.appendChild(p)}setTimeout(()=>area.innerHTML='',2300)}
-$('gear').onclick=()=>$('settings').classList.toggle('open');$('save').onclick=save;$('start').onclick=start;$('stop').onclick=stop;document.addEventListener('keydown',e=>{if(e.code==='Space'){rolling?stop():start()}});load();
+const $=id=>document.getElementById(id);let timer=null,rolling=false,current='□',tries=0,wins=0;
+function splitChars(v){return v.split(/[、,\n\s]+/).map(s=>s.trim()).filter(Boolean).map(s=>[...s][0]);}
+function getConfig(){return{word:$('wordInput').value.trim()||'しるこ',rate:parseInt($('rateInput').value,10)||10,chars:splitChars($('charsInput').value),bottom:$('bottomInput').value||'だよ'}}
+function applyWord(){const c=getConfig();const arr=[...c.word];$('second').textContent=arr[1]||'';$('third').textContent=arr.slice(2).join('')||'';$('bottomText').textContent=c.bottom;}
+function start(){applyWord();const c=getConfig();rolling=true;$('stage').classList.add('rolling');$('startStop').textContent='STOP';$('startStop').classList.add('stop');$('message').textContent='回転中…';timer=setInterval(()=>{const chars=c.chars.length?c.chars:['あ','い','う','え','お','し','ま','な','た'];current=chars[Math.floor(Math.random()*chars.length)];$('first').textContent=current;},55)}
+function stop(){clearInterval(timer);timer=null;rolling=false;$('stage').classList.remove('rolling');$('startStop').textContent='START';$('startStop').classList.remove('stop');const c=getConfig();const target=[...c.word][0]||'し';tries++;let hit=Math.floor(Math.random()*c.rate)===0;if(hit)current=target;else{let pool=c.chars.filter(x=>x!==target);if(!pool.length)pool=['あ','ま','な','た','か'].filter(x=>x!==target);current=pool[Math.floor(Math.random()*pool.length)]||'あ';}$('first').textContent=current;const result=current+[...c.word].slice(1).join('');if(current===target){wins++;$('message').textContent='🎉 '+result+' 完成！！';$('slotFrame').classList.add('successFlash');confetti();setTimeout(()=>$('slotFrame').classList.remove('successFlash'),2600)}else{$('message').textContent=result+'… ざんねん！'}localStorage.setItem('sirukoSlotStats',JSON.stringify({tries,wins}));}
+function confetti(){const box=$('confetti');box.innerHTML='';const colors=['#ff36c8','#fff02a','#31ff8b','#ffffff','#ff7a00'];for(let i=0;i<80;i++){const p=document.createElement('div');p.className='piece';p.style.left=Math.random()*100+'%';p.style.top='-30px';p.style.background=colors[i%colors.length];p.style.animationDelay=Math.random()*.4+'s';p.style.transform='rotate('+Math.random()*360+'deg)';box.appendChild(p)}setTimeout(()=>box.innerHTML='',2200)}
+$('startStop').onclick=()=>rolling?stop():start();$('reset').onclick=()=>{$('first').textContent='□';$('message').textContent='スタートを押してね'};$('openSettings').onclick=()=>{$('settings').classList.add('open')};$('saveSettings').onclick=()=>{localStorage.setItem('sirukoSlotConfig',JSON.stringify(getConfig()));$('settings').classList.remove('open');applyWord()};$('settings').onclick=e=>{if(e.target===$('settings'))$('settings').classList.remove('open')};
+try{const saved=JSON.parse(localStorage.getItem('sirukoSlotConfig')||'null');if(saved){$('wordInput').value=saved.word;$('rateInput').value=String(saved.rate);$('charsInput').value=saved.chars.join(',');$('bottomInput').value=saved.bottom}const st=JSON.parse(localStorage.getItem('sirukoSlotStats')||'null');if(st){tries=st.tries||0;wins=st.wins||0}}catch(e){}applyWord();
 </script>
 </body>
 </html>
