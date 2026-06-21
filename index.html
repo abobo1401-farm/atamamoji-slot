@@ -5,73 +5,407 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>しるこスロット</title>
 <style>
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:'Yu Gothic','Hiragino Sans','Meiryo',sans-serif;background:#16001f;color:#fff;touch-action:manipulation;user-select:none}
-  body{background:
-    radial-gradient(circle at 50% 20%, rgba(255,0,150,.55), transparent 32%),
-    radial-gradient(circle at 50% 50%, rgba(255,180,0,.25), transparent 22%),
-    radial-gradient(circle at 20% 80%, rgba(255,0,200,.35), transparent 25%),
-    linear-gradient(180deg,#100018 0%,#24002d 55%,#09000f 100%);}
-  .stars{position:fixed;inset:0;pointer-events:none;background-image:
-    radial-gradient(#fff 1.5px, transparent 2px),radial-gradient(#ff4bd8 2px, transparent 3px),radial-gradient(#ffd32a 2px, transparent 3px);
-    background-size:90px 90px,140px 140px,180px 180px;animation:twinkle 3s infinite alternate;opacity:.9}
-  @keyframes twinkle{from{filter:brightness(.8)}to{filter:brightness(1.4)}}
-  .wrap{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 12px 96px;gap:14px}
-  .title{font-weight:900;font-size:clamp(24px,7vw,42px);letter-spacing:.04em;text-shadow:0 0 10px #ff1493,0 4px 0 #5b001d;color:#fff}
-  .slotFrame{width:min(96vw,780px);border-radius:28px;padding:10px;background:linear-gradient(180deg,#ff31c8,#fff02a 18%,#ff9100 45%,#ff31c8 100%);box-shadow:0 0 22px #ff1cc8, inset 0 0 0 4px #fff;}
-  .reels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;background:#4a1600;border-radius:22px;padding:8px}
-  .reel{height:clamp(130px,34vw,230px);border-radius:20px;background:linear-gradient(180deg,#fff,#fff9f0);display:flex;align-items:center;justify-content:center;border:5px solid #210006;box-shadow:inset 0 0 0 5px #e7c6aa,0 2px 0 #fff;color:#230006;overflow:hidden}
-  .letter{font-size:clamp(74px,22vw,170px);font-weight:1000;line-height:1;text-shadow:4px 0 #ffcf24,-4px 0 #ffcf24,0 4px #ffcf24,0 -4px #ffcf24,0 0 12px #ff39c7;transform:translateY(-2px)}
-  .rolling .first{animation:bounce .08s infinite alternate}
-  @keyframes bounce{from{transform:translateY(-8px) scale(1.03)}to{transform:translateY(8px) scale(.98)}}
-  .subtitle{font-size:clamp(46px,16vw,110px);font-weight:1000;color:#280006;text-shadow:4px 0 #ffd72c,-4px 0 #ffd72c,0 4px #ffd72c,0 -4px #ffd72c,0 0 16px #ff2bbc,0 8px 0 #9b0037;line-height:.95}
-  .message{min-height:38px;font-size:clamp(20px,6vw,36px);font-weight:900;text-shadow:0 0 10px #ff2bbc;text-align:center}
-  .panel{position:fixed;left:0;right:0;bottom:0;z-index:5;background:rgba(15,0,25,.86);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.25);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  button,input,select,textarea{font:inherit;border:0;border-radius:14px}
-  .mainBtn{grid-column:1/3;height:56px;font-size:24px;font-weight:900;color:#fff;background:linear-gradient(180deg,#18e56e,#039e3c);box-shadow:0 5px 0 #005c20}
-  .stop{background:linear-gradient(180deg,#ff3b78,#c50039);box-shadow:0 5px 0 #74001e}
-  .miniBtn{height:42px;background:#fff;color:#301;font-weight:800}
-  .settings{position:fixed;z-index:10;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end}.settings.open{display:flex}
-  .sheet{width:100%;max-height:86dvh;overflow:auto;background:#fff;color:#222;border-radius:22px 22px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom))}
-  .sheet h2{margin:0 0 10px;font-size:22px}.row{margin:12px 0}.row label{display:block;font-weight:800;margin-bottom:5px}.row input,.row select,.row textarea{width:100%;padding:12px;background:#f1f1f5;color:#111;border:1px solid #ddd}.row textarea{height:110px;resize:vertical}.closeBtn{width:100%;height:48px;background:#222;color:#fff;font-weight:900;margin-top:10px}.successFlash{animation:flash .9s ease-in-out 3}@keyframes flash{50%{filter:brightness(2.3) saturate(1.8)}}
-  .confetti{position:fixed;inset:0;pointer-events:none;z-index:4;overflow:hidden}.piece{position:absolute;width:10px;height:18px;background:#fff;animation:fall 1.8s linear forwards}@keyframes fall{to{transform:translateY(110dvh) rotate(720deg);opacity:0}}
+  :root{
+    --bg1:#25104d;
+    --bg2:#ff6aa2;
+    --accent:#ffe66d;
+    --pink:#ff4fa3;
+    --blue:#36d6ff;
+    --white:#fff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;
+    min-height:100svh;
+    font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    color:#fff;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,.25), transparent 12%),
+      radial-gradient(circle at 80% 18%, rgba(255,230,109,.35), transparent 14%),
+      radial-gradient(circle at 50% 85%, rgba(54,214,255,.22), transparent 18%),
+      linear-gradient(135deg,var(--bg1),#6d2ec7 46%,var(--bg2));
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,.65) 0 2px, transparent 3px),
+      radial-gradient(circle, rgba(255,230,109,.5) 0 2px, transparent 3px);
+    background-size:58px 58px, 88px 88px;
+    background-position:0 0, 24px 30px;
+    opacity:.45;
+    pointer-events:none;
+  }
+  .app{
+    position:relative;
+    z-index:1;
+    width:min(920px,100%);
+    min-height:100svh;
+    margin:0 auto;
+    padding:clamp(14px,3vw,26px);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  header{text-align:center;padding-top:8px;}
+  .title{
+    display:inline-block;
+    margin:0;
+    padding:10px 20px;
+    font-size:clamp(26px,7vw,58px);
+    line-height:1.05;
+    color:#fff;
+    text-shadow:0 4px 0 #9b2374,0 0 22px rgba(255,255,255,.55);
+    transform:rotate(-1.5deg);
+  }
+  .subtitle{
+    margin:0 auto;
+    display:inline-block;
+    padding:6px 16px;
+    font-size:clamp(14px,3.5vw,24px);
+    font-weight:900;
+    color:#552300;
+    background:linear-gradient(#fff7b0,#ffd447);
+    border-radius:999px;
+    box-shadow:0 5px 0 rgba(101,57,0,.35);
+  }
+  .slotWrap{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 0;
+  }
+  .slot{
+    display:flex;
+    gap:clamp(8px,2vw,18px);
+    align-items:center;
+    justify-content:center;
+    width:100%;
+  }
+  .charBox{
+    width:clamp(86px,26vw,190px);
+    height:clamp(100px,28vw,220px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:28px;
+    font-size:clamp(64px,20vw,158px);
+    font-weight:1000;
+    color:#2b1260;
+    background:linear-gradient(180deg,#fff,#f3efff);
+    border:6px solid rgba(255,255,255,.95);
+    box-shadow:0 14px 0 rgba(32,10,74,.35),0 0 32px rgba(255,255,255,.55) inset;
+    text-shadow:0 4px 0 rgba(255,255,255,.85);
+  }
+  .rolling{
+    color:#ff2d8d;
+    animation:shake .08s infinite alternate;
+  }
+  @keyframes shake{
+    from{transform:translateY(-3px) rotate(-1deg)}
+    to{transform:translateY(3px) rotate(1deg)}
+  }
+  .success .charBox{
+    color:#6b3a00;
+    background:linear-gradient(180deg,#fff8bd,#ffd33d 55%,#ffb300);
+    box-shadow:0 14px 0 rgba(88,45,0,.45),0 0 44px rgba(255,239,84,.95);
+    animation:successPulse .55s ease-in-out infinite alternate;
+  }
+  @keyframes successPulse{to{transform:scale(1.05);filter:brightness(1.15)}}
+  .message{
+    min-height:44px;
+    text-align:center;
+    font-size:clamp(20px,5vw,42px);
+    font-weight:1000;
+    color:#fff;
+    text-shadow:0 4px 0 rgba(0,0,0,.25),0 0 18px rgba(255,255,255,.65);
+  }
+  .controls{
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:24px;
+    padding:14px;
+    backdrop-filter:blur(8px);
+    box-shadow:0 12px 32px rgba(0,0,0,.18);
+  }
+  .mainBtn{
+    width:100%;
+    border:0;
+    border-radius:22px;
+    padding:18px 12px;
+    font-size:clamp(24px,7vw,44px);
+    font-weight:1000;
+    color:#fff;
+    background:linear-gradient(180deg,#ff7ab8,#ff208a);
+    box-shadow:0 9px 0 #9e0f5a,0 0 24px rgba(255,255,255,.3) inset;
+    cursor:pointer;
+  }
+  .mainBtn:active{transform:translateY(5px);box-shadow:0 4px 0 #9e0f5a;}
+  .settings{
+    margin-top:12px;
+    display:grid;
+    gap:10px;
+  }
+  label{font-weight:900;font-size:15px;}
+  select,button.small{
+    width:100%;
+    font-size:18px;
+    font-weight:900;
+    padding:12px;
+    border-radius:14px;
+    border:3px solid rgba(255,255,255,.85);
+    background:#fff;
+    color:#3b1c66;
+  }
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  button.small{background:#fff7b0;cursor:pointer;}
+  .hint{
+    opacity:.9;
+    text-align:center;
+    font-size:12px;
+    line-height:1.5;
+  }
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5;}
+  .piece{position:absolute;width:10px;height:18px;top:-24px;animation:fall 1.8s linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+  @media (min-width:700px){.settings{grid-template-columns:1fr 1fr}.mainBtn{max-width:520px;margin:0 auto;display:block}.controls{max-width:720px;margin:0 auto 10px;width:100%;}}
 </style>
 </head>
 <body>
-<div class="stars"></div><div class="confetti" id="confetti"></div>
-<div class="wrap" id="stage">
-  <div class="title">🎰 しるこスロット</div>
-  <div class="slotFrame" id="slotFrame"><div class="reels">
-    <div class="reel"><div class="letter first" id="first">□</div></div>
-    <div class="reel"><div class="letter" id="second">る</div></div>
-    <div class="reel"><div class="letter" id="third">こ</div></div>
-  </div></div>
-  <div class="subtitle" id="bottomText">だよ</div>
-  <div class="message" id="message">スタートを押してね</div>
+<div class="app">
+  <header>
+    <h1 class="title">🎰 しるこスロット</h1><br>
+    <div class="subtitle">頭文字が「し」なら成功！</div>
+  </header>
+
+  <main class="slotWrap">
+    <div id="slot" class="slot" aria-live="polite">
+      <div id="head" class="charBox">あ</div>
+      <div class="charBox">る</div>
+      <div class="charBox">こ</div>
+    </div>
+  </main>
+
+  <div id="message" class="message">STARTを押してね</div>
+
+  <section class="controls">
+    <button id="mainBtn" class="mainBtn">START</button>
+    <div class="settings">
+      <div>
+        <label for="rate">成功率</label>
+        <select id="rate">
+          <option value="0.20">20％</option>
+          <option value="0.10" selected>10％</option>
+          <option value="0.05">5％</option>
+          <option value="1">必ず成功</option>
+        </select>
+      </div>
+      <div>
+        <label for="sound">効果音</label>
+        <select id="sound">
+          <option value="on" selected>ON</option>
+          <option value="off">OFF</option>
+        </select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <button id="resetBtn" class="small">表示リセット</button>
+      <button id="testBtn" class="small">音テスト</button>
+    </div>
+    <div class="hint">音源ファイル名：piko.mp3 / pon.mp3 / success.mp3 / fail.mp3 / voice.mp3</div>
+  </section>
 </div>
-<div class="panel">
-  <button class="mainBtn" id="startStop">START</button>
-  <button class="miniBtn" id="reset">リセット</button>
-  <button class="miniBtn" id="openSettings">設定</button>
-</div>
-<div class="settings" id="settings"><div class="sheet">
-  <h2>設定</h2>
-  <div class="row"><label>完成させたい単語</label><input id="wordInput" value="しるこ" /></div>
-  <div class="row"><label>成功率</label><select id="rateInput"><option value="10">1/10</option><option value="5">1/5</option><option value="20">1/20</option><option value="50">1/50</option><option value="1">必ず成功</option></select></div>
-  <div class="row"><label>ルーレット候補（1文字ずつ / 改行かカンマ区切り）</label><textarea id="charsInput">あ,い,う,え,お,か,き,く,け,こ,さ,し,す,せ,そ,た,ち,つ,て,と,な,に,ぬ,ね,の,は,ひ,ふ,へ,ほ,ま,み,む,め,も,や,ゆ,よ,ら,り,る,れ,ろ,わ</textarea></div>
-  <div class="row"><label>下の文字</label><input id="bottomInput" value="だよ" /></div>
-  <button class="closeBtn" id="saveSettings">保存して閉じる</button>
-</div></div>
+<div id="confetti" class="confetti"></div>
+
 <script>
-const $=id=>document.getElementById(id);let timer=null,rolling=false,current='□',tries=0,wins=0;
-function splitChars(v){return v.split(/[、,\n\s]+/).map(s=>s.trim()).filter(Boolean).map(s=>[...s][0]);}
-function getConfig(){return{word:$('wordInput').value.trim()||'しるこ',rate:parseInt($('rateInput').value,10)||10,chars:splitChars($('charsInput').value),bottom:$('bottomInput').value||'だよ'}}
-function applyWord(){const c=getConfig();const arr=[...c.word];$('second').textContent=arr[1]||'';$('third').textContent=arr.slice(2).join('')||'';$('bottomText').textContent=c.bottom;}
-function start(){applyWord();const c=getConfig();rolling=true;$('stage').classList.add('rolling');$('startStop').textContent='STOP';$('startStop').classList.add('stop');$('message').textContent='回転中…';timer=setInterval(()=>{const chars=c.chars.length?c.chars:['あ','い','う','え','お','し','ま','な','た'];current=chars[Math.floor(Math.random()*chars.length)];$('first').textContent=current;},55)}
-function stop(){clearInterval(timer);timer=null;rolling=false;$('stage').classList.remove('rolling');$('startStop').textContent='START';$('startStop').classList.remove('stop');const c=getConfig();const target=[...c.word][0]||'し';tries++;let hit=Math.floor(Math.random()*c.rate)===0;if(hit)current=target;else{let pool=c.chars.filter(x=>x!==target);if(!pool.length)pool=['あ','ま','な','た','か'].filter(x=>x!==target);current=pool[Math.floor(Math.random()*pool.length)]||'あ';}$('first').textContent=current;const result=current+[...c.word].slice(1).join('');if(current===target){wins++;$('message').textContent='🎉 '+result+' 完成！！';$('slotFrame').classList.add('successFlash');confetti();setTimeout(()=>$('slotFrame').classList.remove('successFlash'),2600)}else{$('message').textContent=result+'… ざんねん！'}localStorage.setItem('sirukoSlotStats',JSON.stringify({tries,wins}));}
-function confetti(){const box=$('confetti');box.innerHTML='';const colors=['#ff36c8','#fff02a','#31ff8b','#ffffff','#ff7a00'];for(let i=0;i<80;i++){const p=document.createElement('div');p.className='piece';p.style.left=Math.random()*100+'%';p.style.top='-30px';p.style.background=colors[i%colors.length];p.style.animationDelay=Math.random()*.4+'s';p.style.transform='rotate('+Math.random()*360+'deg)';box.appendChild(p)}setTimeout(()=>box.innerHTML='',2200)}
-$('startStop').onclick=()=>rolling?stop():start();$('reset').onclick=()=>{$('first').textContent='□';$('message').textContent='スタートを押してね'};$('openSettings').onclick=()=>{$('settings').classList.add('open')};$('saveSettings').onclick=()=>{localStorage.setItem('sirukoSlotConfig',JSON.stringify(getConfig()));$('settings').classList.remove('open');applyWord()};$('settings').onclick=e=>{if(e.target===$('settings'))$('settings').classList.remove('open')};
-try{const saved=JSON.parse(localStorage.getItem('sirukoSlotConfig')||'null');if(saved){$('wordInput').value=saved.word;$('rateInput').value=String(saved.rate);$('charsInput').value=saved.chars.join(',');$('bottomInput').value=saved.bottom}const st=JSON.parse(localStorage.getItem('sirukoSlotStats')||'null');if(st){tries=st.tries||0;wins=st.wins||0}}catch(e){}applyWord();
+(() => {
+  'use strict';
+
+  const CANDIDATES = [
+    'あ','い','う','え','お',
+    'か','き','く','け','こ',
+    'さ','し','す','せ','そ',
+    'た','ち','つ','て','と',
+    'な','に','ぬ','ね','の',
+    'は','ひ','ふ','へ','ほ',
+    'ま','み','む','め','も',
+    'や','ゆ','よ',
+    'ら','り','る','れ','ろ',
+    'わ',
+    'が','ぎ','ぐ','げ','ご',
+    'ざ','じ','ず','ぜ','ぞ',
+    'だ','ぢ','づ','で','ど',
+    'ば','び','ぶ','べ','ぼ',
+    'ぱ','ぴ','ぷ','ぺ','ぽ',
+    'ゔ'
+  ];
+
+  const SUCCESS_CHAR = 'し';
+  const head = document.getElementById('head');
+  const slot = document.getElementById('slot');
+  const message = document.getElementById('message');
+  const mainBtn = document.getElementById('mainBtn');
+  const rate = document.getElementById('rate');
+  const sound = document.getElementById('sound');
+  const resetBtn = document.getElementById('resetBtn');
+  const testBtn = document.getElementById('testBtn');
+  const confetti = document.getElementById('confetti');
+
+  let timer = null;
+  let rolling = false;
+  let idx = 0;
+
+  const sounds = {
+    piko: new Audio('piko.mp3'),
+    pon: new Audio('pon.mp3'),
+    success: new Audio('success.mp3'),
+    fail: new Audio('fail.mp3'),
+    voice: new Audio('voice.mp3')
+  };
+  Object.values(sounds).forEach(a => {
+    a.preload = 'auto';
+    a.volume = 1;
+  });
+
+  function saveSettings(){
+    localStorage.setItem('siruko-slot-rate', rate.value);
+    localStorage.setItem('siruko-slot-sound', sound.value);
+  }
+  function loadSettings(){
+    const r = localStorage.getItem('siruko-slot-rate');
+    const s = localStorage.getItem('siruko-slot-sound');
+    if(r) rate.value = r;
+    if(s) sound.value = s;
+  }
+
+  function play(name){
+    if(sound.value !== 'on') return;
+    const a = sounds[name];
+    if(!a) return;
+    try{
+      a.pause();
+      a.currentTime = 0;
+      const p = a.play();
+      if(p && typeof p.catch === 'function') p.catch(()=>{});
+    }catch(e){}
+  }
+
+  function playSuccessSequence(){
+    play('success');
+    if(sound.value !== 'on') return;
+    setTimeout(() => play('voice'), 850);
+  }
+
+  function start(){
+    if(rolling) return;
+    saveSettings();
+    rolling = true;
+    slot.classList.remove('success');
+    head.classList.add('rolling');
+    message.textContent = '回転中…';
+    mainBtn.textContent = 'STOP';
+    play('piko');
+    timer = setInterval(() => {
+      idx = (idx + 1) % CANDIDATES.length;
+      head.textContent = CANDIDATES[idx];
+    }, 48);
+  }
+
+  function stop(){
+    if(!rolling) return;
+    rolling = false;
+    clearInterval(timer);
+    timer = null;
+    head.classList.remove('rolling');
+    mainBtn.textContent = 'START';
+    play('pon');
+
+    const isSuccess = Math.random() < Number(rate.value);
+    const finalChar = isSuccess ? SUCCESS_CHAR : randomFailChar();
+    animateStop(finalChar, () => {
+      if(isSuccess){
+        head.textContent = SUCCESS_CHAR;
+        slot.classList.add('success');
+        message.textContent = '🎉 しるこ完成！！';
+        burstConfetti();
+        setTimeout(playSuccessSequence, 260);
+      }else{
+        head.textContent = finalChar;
+        slot.classList.remove('success');
+        message.textContent = finalChar + 'るこ… チーン';
+        setTimeout(() => play('fail'), 260);
+      }
+    });
+  }
+
+  function animateStop(finalChar, done){
+    let count = 0;
+    const max = 12;
+    const t = setInterval(() => {
+      count++;
+      head.textContent = CANDIDATES[Math.floor(Math.random() * CANDIDATES.length)];
+      if(count >= max){
+        clearInterval(t);
+        head.textContent = finalChar;
+        done();
+      }
+    }, 70);
+  }
+
+  function randomFailChar(){
+    const list = CANDIDATES.filter(c => c !== SUCCESS_CHAR);
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function reset(){
+    if(timer) clearInterval(timer);
+    timer = null;
+    rolling = false;
+    head.textContent = 'あ';
+    head.classList.remove('rolling');
+    slot.classList.remove('success');
+    message.textContent = 'STARTを押してね';
+    mainBtn.textContent = 'START';
+    confetti.innerHTML = '';
+  }
+
+  function burstConfetti(){
+    confetti.innerHTML = '';
+    const colors = ['#fff200','#ff4fa3','#36d6ff','#ffffff','#8cff6a'];
+    for(let i=0;i<90;i++){
+      const p = document.createElement('div');
+      p.className = 'piece';
+      p.style.left = Math.random()*100 + 'vw';
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.animationDelay = (Math.random()*0.35) + 's';
+      p.style.animationDuration = (1.2 + Math.random()*1.1) + 's';
+      p.style.transform = 'rotate(' + Math.random()*360 + 'deg)';
+      confetti.appendChild(p);
+    }
+    setTimeout(()=>{ confetti.innerHTML = ''; }, 2600);
+  }
+
+  mainBtn.addEventListener('click', () => rolling ? stop() : start());
+  resetBtn.addEventListener('click', reset);
+  testBtn.addEventListener('click', () => {
+    play('piko');
+    setTimeout(()=>play('pon'), 420);
+    setTimeout(()=>play('success'), 850);
+    setTimeout(()=>play('fail'), 1350);
+  });
+  rate.addEventListener('change', saveSettings);
+  sound.addEventListener('change', saveSettings);
+  document.addEventListener('keydown', e => {
+    if(e.code === 'Space'){
+      e.preventDefault();
+      rolling ? stop() : start();
+    }
+  });
+
+  loadSettings();
+})();
 </script>
 </body>
 </html>
