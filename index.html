@@ -67,21 +67,70 @@ let timer=null,rolling=false,current='□',tries=0,wins=0;
 const TARGET_WORD='しるこ';
 const DEFAULT_CHARS='あ,い,う,え,お,か,き,く,け,こ,さ,し,す,せ,そ,た,ち,つ,て,と,な,に,ぬ,ね,の,は,ひ,ふ,へ,ほ,ま,み,む,め,も,や,ゆ,よ,ら,り,る,れ,ろ,わ,が,ぎ,ぐ,げ,ご,ざ,じ,ず,ぜ,ぞ,だ,ぢ,づ,で,ど,ば,び,ぶ,べ,ぼ,ぱ,ぴ,ぷ,ぺ,ぽ,ゔ';
 
-const sounds={
-  piko:new Audio('piko.mp3'),
-  pon:new Audio('pon.mp3'),
-  success:new Audio('success.mp3'),
-  fail:new Audio('fail.mp3'),
-  voice:new Audio('voice.mp3')
-};
-Object.values(sounds).forEach(a=>{a.preload='auto';a.volume=1;});
+// 効果音：スマホで毎回ラグりにくい Web Audio 方式
+// GitHubに piko.mp3 / pon.mp3 / success.mp3 / fail.mp3 / voice.mp3 を置く
+const SOUND_FILES={piko:'piko.mp3',pon:'pon.mp3',success:'success.mp3',fail:'fail.mp3',voice:'voice.mp3'};
+let audioCtx=null;
+const audioBuffers={};
+const fallbackSounds={};
+Object.keys(SOUND_FILES).forEach(name=>{
+  const a=new Audio(SOUND_FILES[name]);
+  a.preload='auto';
+  a.load();
+  fallbackSounds[name]=a;
+});
 
+function ensureAudioCtx(){
+  try{
+    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+  }catch(e){}
+}
+async function preloadOneSound(name){
+  if(audioBuffers[name]) return;
+  try{
+    ensureAudioCtx();
+    if(!audioCtx) return;
+    const res=await fetch(SOUND_FILES[name],{cache:'force-cache'});
+    if(!res.ok) return;
+    const arr=await res.arrayBuffer();
+    audioBuffers[name]=await audioCtx.decodeAudioData(arr);
+  }catch(e){}
+}
+function preloadSounds(){ Object.keys(SOUND_FILES).forEach(preloadOneSound); }
+function unlockAudio(){
+  ensureAudioCtx();
+  preloadSounds();
+  // iPhone対策：初回タップで音声権限だけ開ける
+  try{
+    if(audioCtx){
+      const b=audioCtx.createBuffer(1,1,22050);
+      const s=audioCtx.createBufferSource();
+      s.buffer=b;
+      s.connect(audioCtx.destination);
+      s.start(0);
+    }
+  }catch(e){}
+}
 function playSound(name){
-  const base=sounds[name];
+  try{
+    ensureAudioCtx();
+    const buf=audioBuffers[name];
+    if(audioCtx && buf){
+      const src=audioCtx.createBufferSource();
+      src.buffer=buf;
+      src.connect(audioCtx.destination);
+      src.start(0);
+      return;
+    }
+  }catch(e){}
+  // 読み込み前だけHTMLAudioで代用
+  const base=fallbackSounds[name];
   if(!base) return;
   try{
     const a=base.cloneNode();
-    a.volume=base.volume;
+    a.preload='auto';
+    a.volume=1;
     const r=a.play();
     if(r && r.catch) r.catch(()=>{});
   }catch(e){}
@@ -90,6 +139,9 @@ function playSuccessSounds(){
   playSound('success');
   setTimeout(()=>playSound('voice'),900);
 }
+preloadSounds();
+window.addEventListener('pointerdown',unlockAudio,{once:true,passive:true});
+window.addEventListener('touchstart',unlockAudio,{once:true,passive:true});
 
 function splitChars(v){
   return v.split(/[、,\n\s]+/)
@@ -167,7 +219,7 @@ function stop(){
     setTimeout(()=>$('slotFrame').classList.remove('successFlash'),2600)
   }else{
     $('message').textContent=result+'… ざんねん！';
-    setTimeout(()=>playSound('fail'),180);
+    playSound('fail');
   }
   localStorage.setItem('sirukoSlotStats',JSON.stringify({tries,wins}));
 }
